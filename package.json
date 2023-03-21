@@ -1,0 +1,30 @@
+{
+  "name": "testreactinterfaceweb",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "flow": "flow"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://VegetalPlace@dev.azure.com/VegetalPlace/TestReactInterfaceWeb/_git/TestReactInterfaceWeb"
+  },
+  "dependencies": {
+    "next": "^12.0.9",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "swr": "^2.1.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "eslint": "8.7.0",
+    "eslint-config-next": "12.0.9",
+    "postcss": "^8.4.21",
+    "prop-types": "^15.8.1",
+    "tailwindcss": "^3.2.7"
+  }
+}
