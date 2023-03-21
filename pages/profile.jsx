@@ -2,6 +2,7 @@ import { useContext } from "react";
 import Layout from "../components/Layout";
 import { AuthContext } from "../store/AuthProvider";
 import { GlobalContext } from "../store/GlobalStore";
+import LoginPopup from "../components/LoginPopup";
 // import { PopupContext } from "../store/PopupProvider";
 
 export default function Profile() {
@@ -12,6 +13,7 @@ export default function Profile() {
   if (!auth.isLogged && typeof profile.data === "string")
     return (
       <Layout>
+        <LoginPopup />
         <div className="flex flex-col w-full md:w-2/3 lg:w-3/4 mb-4">
           <h2 className="font-bold text-xl mb-4"> Profil</h2>
           <p className="bg-gray-100 shadow-md p-4 rounded-md w-full text-red-600">
@@ -23,6 +25,7 @@ export default function Profile() {
 
   return (
     <Layout>
+      <LoginPopup />
       <div className="flex flex-col w-full md:w-2/3 lg:w-3/4 mb-4">
         <h2 className="font-bold text-xl mb-4"> Profil</h2>
 
