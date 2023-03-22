@@ -1,8 +1,7 @@
-import { memo, useContext, useEffect, useState } from "react";
+import { memo, useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../store/AuthProvider";
 import { fetcher } from "../utils/fetcher";
 import Button from "./Button";
-// import { PopupContext } from "../store/PopupProvider";
 import { GlobalContext } from "../store/GlobalStore";
 import Link from "next/link";
 
@@ -11,9 +10,8 @@ const Menu = () => {
 
   const { auth, setAuth } = useContext(AuthContext);
   const { setArticles, setProfile } = useContext(GlobalContext);
-  // const actions = useContext(PopupContext)
 
-  function getArticles() {
+  const getArticles = useCallback(() => {
     fetcher(
       "https://vp-api-manag.azure-api.net/testapi/api/v1/articles",
       auth.token
@@ -21,9 +19,9 @@ const Menu = () => {
       setArticles({ fetch: true, data: res.data, isFetching: false })
     );
     setOpen(false);
-  }
+  }, [auth.token])
 
-  function getProfile() {
+  const getProfile = useCallback(() => {
     fetcher(
       "https://vp-api-manag.azure-api.net/testapi/api/v1/profils",
       auth.token
@@ -39,7 +37,8 @@ const Menu = () => {
       
     );
     setOpen(false);
-  }
+  }, [auth.token])
+
 
   useEffect(() => {
     getArticles();

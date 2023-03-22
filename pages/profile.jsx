@@ -27,7 +27,7 @@ export default function Profile() {
           <DisplayItem label="clé" data={profile?.data?.cle} />
           <DisplayItem
             label="disconnected"
-            data={profile?.disconnected ? "connecté" : "déconnecté"}
+            data={profile?.disconnected ? "true" : "false"}
           />
         </div>
       ) : (

@@ -44,12 +44,13 @@ export default function LoginPopup() {
         if (res?.error) {
           actions.setLoginError(true, res.description)
         }
-        setAuth({ isLogged: true, token: res, data: auth.data })        
+        const data = { isLogged: true, token: res, data: auth.data }
+        setAuth(data)
+        localStorage.setItem("auth", JSON.stringify(data))        
         setMutating(false)
         actions.setLoginPopup(false, "")        
       }      
     );
-    
   };
 
   return (

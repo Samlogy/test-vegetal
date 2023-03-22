@@ -3,8 +3,6 @@ import { GlobalContext } from "../store/GlobalStore";
 
 export default function Articles() {
   const { articles } = useContext(GlobalContext);
-
-  // console.log('articles: ', articles)
   return (
     <div className="flex flex-col w-full md:w-2/3 lg:w-3/4 mb-4">
       <h2 className="font-bold text-xl mb-4"> Articles</h2>
@@ -37,7 +35,7 @@ export default function Articles() {
           </thead>
 
           <tbody className="w-full">
-            {articles.data.map((article) => (
+            {articles?.data?.map((article) => (
               <tr
                 key={article.id}
                 className="odd:bg-gray-100 even:bg-white dark:bg-gray-800 dark:border-gray-700 text-gray-800"
