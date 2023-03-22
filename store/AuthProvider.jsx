@@ -5,18 +5,21 @@ export const AuthContext = createContext(null);
 export default function AuthProvider({ children }) {
   const [auth, setAuth] = useState({
     isLogged: false,
-    token:
-      "",
+    token: "",
+    data: {}
   });
 
   useEffect(() => {
     const data = localStorage.getItem("auth");
     if (data) {
-      setAuth(data);
+      setAuth(JSON.parse(data));
       return;
     }
-    localStorage.setItem("auth", JSON.stringify(auth));
   }, []);
+
+  useEffect(() => {
+   localStorage.setItem("auth", JSON.stringify(auth));
+  }, [auth.isLogged]);
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>

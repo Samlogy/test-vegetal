@@ -9,18 +9,16 @@ async function logoutRequest(token) {
   "passWord": "Algeria@1234"
 }
   try {
-   const res =await fetch("https://testapi-dev.bluewater-42fcce1d.northeurope.azurecontainerapps.io/api/v1/tokens/deconnexion", {
+   const res =await fetch("https://vp-api-manag.azure-api.net/testapi/api/v1/tokens/deconnexion", {
     method: "PUT",
-    body: JSON.stringify(form),
+    body: "",
     headers: {
-      "Content-type": "application/json",
       "X-ApiKey": "7388DFBB-AE8B-4331-9F60-3C247604F0B6",
       Authorization: token
     },
   })
-  const d = res.json();
-    console.log("ress: ", d);
-    return d;
+  const json = await res.json();
+    return json;
   } catch (err) {
    console.log('err: ', err) 
   }
@@ -30,14 +28,19 @@ export default function AuthButton() {
   const { setAuth, auth } = useContext(AuthContext);
   const actions = useContext(PopupContext);
 
-  // console.log('Logout ERR: ', error)
 
   const onLogout = async () => {
     try {
-      await logoutRequest(auth.token);
-      setAuth({ isLogged: false, token: "" });
+      const result = await logoutRequest(auth.token);  
+      console.log('result: ', result)
+      if (result) {
+        actions.setLogoutError(true, result)  
+        return
+      } 
+      setAuth({ isLogged: false, token: "", data: {} });
+      
     } catch (err) {
-      actions.setLogoutError(true, err.message);
+      console.log(err)
     }
   };
 

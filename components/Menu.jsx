@@ -9,7 +9,7 @@ import Link from "next/link";
 const Menu = () => {
   const [isOpen, setOpen] = useState(false);
 
-  const { auth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const { setArticles, setProfile } = useContext(GlobalContext);
   // const actions = useContext(PopupContext)
 
@@ -27,12 +27,16 @@ const Menu = () => {
     fetcher(
       "https://vp-api-manag.azure-api.net/testapi/api/v1/profils",
       auth.token
-    ).then((res) =>     
+    ).then((res) =>
+    {
       setProfile({
         fetch: true,
         data: res.data,
         isFetching: false
-      })
+      });
+      setAuth({isLogged: auth.isLogged, token: auth.token, data: typeof res.data !== "string" && res.data })
+    }     
+      
     );
     setOpen(false);
   }

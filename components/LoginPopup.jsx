@@ -2,37 +2,24 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../store/AuthProvider";
 import { PopupContext } from "../store/PopupProvider";
 import Button from "./Button";
-import Modal from "./Modal"
+import Modal from "./Modal";
 
-const loginRequest = async (url, token, body) => {
-  console.log('body: ',body)
+const loginRequest = async (url,  body) => {
+  console.log("body: ", body);
   try {
     const res = await fetch(url, {
       method: "POST",
       body: JSON.stringify(body),
-      mode: "cors",
       headers: {
-        accept: "text/plain",
-        // "Content-type": "text/plain",
+        accept: "application/json",
+        "content-type": "application/json",
         "X-ApiKey": "7388DFBB-AE8B-4331-9F60-3C247604F0B6",
-        "Access-Control-Allow-Origin": "*",
-        // Authorization: token        
       },
     });
-    console.log("res: ", res);
-    const json = await res.json();
-    console.log("json: ", json);
-    return json
-    // return {
-    //   data: json,
-    //   error: null,
-    // };
+    const json = await res.json()
+    return json  
   } catch (err) {
     console.log("login error: ", err);
-    // return {
-    //   data: null,
-    //   error: err,
-    // };
   }
 };
 
@@ -46,19 +33,23 @@ export default function LoginPopup() {
   const { setAuth, auth } = useContext(AuthContext);
   const actions = useContext(PopupContext);
 
-
-  const onLogin = (e) => {
+  const onLogin = async (e) => {
     e.preventDefault();
     setMutating(true);
 
-    loginRequest(
-      "https://testapi-dev.bluewater-42fcce1d.northeurope.azurecontainerapps.io/api/v1/tokens/authentification", auth.token,
+    loginRequest("https://vp-api-manag.azure-api.net/testapi/api/v1/tokens/authentification",
       form
     ).then(
-      (res) => console.log("result: ", res)
-      // setAuth({ isLogged: true, token: result })
+      (res) => {
+        if (res?.error) {
+          actions.setLoginError(true, res.description)
+        }
+        setAuth({ isLogged: true, token: res, data: auth.data })        
+        setMutating(false)
+        actions.setLoginPopup(false, "")        
+      }      
     );
-    setMutating(false);
+    
   };
 
   return (

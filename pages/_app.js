@@ -4,6 +4,8 @@ import AuthProvider from "../store/AuthProvider";
 import PopupProvider from "../store/PopupProvider";
 import ErrorBoundary from "../components/ErrorBoundary";
 import GlobalProvider from "../store/GlobalStore";
+import PopUp from "../components/PopUp";
+import LoginPopup from "../components/LoginPopup";
 
 export default function MyApp({ Component, pageProps }) {
   return (
@@ -17,6 +19,8 @@ export default function MyApp({ Component, pageProps }) {
           <AuthProvider>
             <PopupProvider>
               <Component {...pageProps} />
+              <PopUp />
+              <LoginPopup />
             </PopupProvider>
           </AuthProvider>
         </GlobalProvider>
