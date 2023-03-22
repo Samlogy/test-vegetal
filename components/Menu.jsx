@@ -18,7 +18,7 @@ const Menu = () => {
       "https://vp-api-manag.azure-api.net/testapi/api/v1/articles",
       auth.token
     ).then((res) =>
-      setArticles({ fetch: true, data: res.data })
+      setArticles({ fetch: true, data: res.data, isFetching: false })
     );
     setOpen(false);
   }
@@ -31,6 +31,7 @@ const Menu = () => {
       setProfile({
         fetch: true,
         data: res.data,
+        isFetching: false
       })
     );
     setOpen(false);
