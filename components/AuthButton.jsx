@@ -1,35 +1,40 @@
 import { useContext } from "react";
-import useSWRMutation from "swr/mutation";
 import { AuthContext } from "../store/AuthProvider";
 import { PopupContext } from "../store/PopupProvider";
 import Button from "./Button";
 
-async function logoutRequest(url, { token }) {
-  console.log("token: ", token);
-  return fetch(url, {
+async function logoutRequest(token) {
+ const form = {
+  "userName": "userTest1",
+  "passWord": "Algeria@1234"
+}
+  try {
+   const res =await fetch("https://testapi-dev.bluewater-42fcce1d.northeurope.azurecontainerapps.io/api/v1/tokens/deconnexion", {
     method: "PUT",
+    body: JSON.stringify(form),
     headers: {
       "Content-type": "application/json",
       "X-ApiKey": "7388DFBB-AE8B-4331-9F60-3C247604F0B6",
-      Authorization: token,
+      Authorization: token
     },
-  }).then((res) => res.json());
+  })
+  const d = res.json();
+    console.log("ress: ", d);
+    return d;
+  } catch (err) {
+   console.log('err: ', err) 
+  }
 }
 
 export default function AuthButton() {
   const { setAuth, auth } = useContext(AuthContext);
   const actions = useContext(PopupContext);
 
-  const { trigger: logout, error } = useSWRMutation(
-    "/deconnexion",
-    (url, token) => logoutRequest(url, auth.token)
-  );
-
-  console.log('Logout ERR: ', error)
+  // console.log('Logout ERR: ', error)
 
   const onLogout = async () => {
     try {
-      await logout(auth.token);
+      await logoutRequest(auth.token);
       setAuth({ isLogged: false, token: "" });
     } catch (err) {
       actions.setLogoutError(true, err.message);

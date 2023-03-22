@@ -1,49 +1,64 @@
 import { useContext, useState } from "react";
-import useSWRMutation from "swr/mutation";
 import { AuthContext } from "../store/AuthProvider";
 import { PopupContext } from "../store/PopupProvider";
 import Button from "./Button";
-import Modal from "./Modal";
+import Modal from "./Modal"
 
-async function loginRequest(url, { body }) {
-  return fetch(url, {
-    method: "POST",
-    body: JSON.stringify(body),
-    headers: {
-      "Content-type": "application/json",
-      "X-ApiKey": "7388DFBB-AE8B-4331-9F60-3C247604F0B6",
-      "Access-Control-Request-Method": "POST",
-      "Access-Control-Request-Headers": "Content-Type, Authorization",
-    },
-  }).then((res) => res.json());
-}
+const loginRequest = async (url, body) => {
+  console.log('body: ',body)
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(body),
+      mode: "no-cors",
+      headers: {
+        accept: "text/plain",
+        // "Content-type": "text/plain",
+        "X-ApiKey": "7388DFBB-AE8B-4331-9F60-3C247604F0B6",
+        "Access-Control-Allow-Origin": "*"
+        
+      },
+    });
+    console.log("res: ", res);
+    const json = await res.json();
+    console.log("json: ", json);
+    return json
+    // return {
+    //   data: json,
+    //   error: null,
+    // };
+  } catch (err) {
+    console.log("login error: ", err);
+    // return {
+    //   data: null,
+    //   error: err,
+    // };
+  }
+};
 
 export default function LoginPopup() {
   const [form, setForm] = useState({
-    userName: "",
-    passWord: "",
+    userName: "userTest1",
+    passWord: "Algeria@1234",
   });
+  const [isMutating, setMutating] = useState(false);
 
-  const { setAuth } = useContext(AuthContext);
+  // const { setAuth } = useContext(AuthContext);
   const actions = useContext(PopupContext);
 
-  const { trigger: login, data: token, error, isMutating } = useSWRMutation(
-    "https://testapi-dev.bluewater-42fcce1d.northeurope.azurecontainerapps.io/api/v1/tokens/authentification",
-    loginRequest
-  );
-  console.log('Login ERR: ', error)
 
-  const onLogin = async (e) => {
+  const onLogin = (e) => {
     e.preventDefault();
-    try {
-      console.log(form)
-      const result = await login(form);
-      console.log("result: ", result);
-      setAuth({ isLogged: true, token });
-    } catch (err) {
-      console.log("err: ", err);
-      actions.setLoginError(true, err.message);
-    }
+    setMutating(true);
+
+    loginRequest(
+      "https://testapi-dev.bluewater-42fcce1d.northeurope.azurecontainerapps.io/api/v1/tokens/authentification",
+      form
+    ).then(
+      (res) => console.log("result: ", res)
+      // setAuth({ isLogged: true, token: result })
+    );
+    setMutating(false);
   };
 
   return (
