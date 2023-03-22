@@ -4,19 +4,19 @@ import { PopupContext } from "../store/PopupProvider";
 import Button from "./Button";
 import Modal from "./Modal"
 
-const loginRequest = async (url, body) => {
+const loginRequest = async (url, token, body) => {
   console.log('body: ',body)
   try {
     const res = await fetch(url, {
       method: "POST",
       body: JSON.stringify(body),
-      mode: "no-cors",
+      mode: "cors",
       headers: {
         accept: "text/plain",
         // "Content-type": "text/plain",
         "X-ApiKey": "7388DFBB-AE8B-4331-9F60-3C247604F0B6",
-        "Access-Control-Allow-Origin": "*"
-        
+        "Access-Control-Allow-Origin": "*",
+        // Authorization: token        
       },
     });
     console.log("res: ", res);
@@ -43,7 +43,7 @@ export default function LoginPopup() {
   });
   const [isMutating, setMutating] = useState(false);
 
-  // const { setAuth } = useContext(AuthContext);
+  const { setAuth, auth } = useContext(AuthContext);
   const actions = useContext(PopupContext);
 
 
@@ -52,7 +52,7 @@ export default function LoginPopup() {
     setMutating(true);
 
     loginRequest(
-      "https://testapi-dev.bluewater-42fcce1d.northeurope.azurecontainerapps.io/api/v1/tokens/authentification",
+      "https://testapi-dev.bluewater-42fcce1d.northeurope.azurecontainerapps.io/api/v1/tokens/authentification", auth.token,
       form
     ).then(
       (res) => console.log("result: ", res)
